@@ -4,3 +4,8 @@ server/node_modules
 client/dist
 .env
 .env.*
+dist
+build
+.playwright
+test-results
+

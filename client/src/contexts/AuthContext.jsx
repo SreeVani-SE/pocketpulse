@@ -1,36 +1,32 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 const AuthContext = createContext(null);
 
+function safeParseProfile() {
+  const raw = localStorage.getItem("pp_profile");
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(null);
-  const [profile, setProfile] = useState(null);
-
-  // 🔁 Rehydrate auth on refresh
-  useEffect(() => {
-    const savedToken = localStorage.getItem("pp_token");
-    const savedProfile = localStorage.getItem("pp_profile");
-
-    if (savedToken && savedProfile) {
-      setToken(savedToken);
-      setProfile(JSON.parse(savedProfile));
-    }
-  }, []);
+  const [token, setToken] = useState(() => localStorage.getItem("pp_token"));
+  const [profile, setProfile] = useState(() => safeParseProfile());
 
   const value = useMemo(
     () => ({
       token,
       profile,
       isAuthed: Boolean(token),
-
       login: ({ token, profile }) => {
         setToken(token);
         setProfile(profile);
-
         localStorage.setItem("pp_token", token);
         localStorage.setItem("pp_profile", JSON.stringify(profile));
       },
-
       logout: () => {
         setToken(null);
         setProfile(null);
