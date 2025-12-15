@@ -14,13 +14,14 @@ const PORT = process.env.PORT || 8080;
 app.use(
   cors({
     origin: [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "https://YOUR_USERNAME.github.io",
-],
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://sreevani-se.github.io",
+    ],
     credentials: false,
   })
 );
+
 
 app.use(express.json());
 
